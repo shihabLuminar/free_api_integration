@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:token_test/global_widgets/refactored_button.dart';
-import 'package:token_test/model/product_model.dart';
+import 'package:token_test/model/products_res_model.dart';
 import 'package:token_test/global_widgets/custom_textfield.dart'; // Assuming this is the file where CustomTextField is defined.
 
 class ProductAddScreen extends StatelessWidget {
@@ -38,7 +38,8 @@ class ProductAddScreen extends StatelessWidget {
         child: ListView(
           children: [
             CustomTextField(controller: nameController, label: "Product Name"),
-            CustomTextField(controller: descriptionController, label: "Description"),
+            CustomTextField(
+                controller: descriptionController, label: "Description"),
             CustomTextField(controller: priceController, label: "Price"),
             CustomTextField(controller: stockController, label: "Stock"),
             CustomTextField(controller: categoryController, label: "Category"),

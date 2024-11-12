@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -8,10 +9,10 @@ import 'package:token_test/model/login_res_model.dart';
 class LoginScreenController with ChangeNotifier {
   bool isLoading = false;
 
-  Future onLogin({
-    required String email,
-    required String password,
-  }) async {
+  Future<bool> onLogin(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
     // url setup
     final url = Uri.parse("https://freeapi.luminartechnohub.com/login");
 
@@ -27,24 +28,28 @@ class LoginScreenController with ChangeNotifier {
 
       // check status code
       if (response.statusCode == 200) {
-        log(response.statusCode.toString());
-        log(response.body.toString());
         // convert data
         LoginResModel loginModel = loginResModelFromJson(response.body);
 
         //check whether access token is available or not
         if (loginModel.access != null && loginModel.access!.isNotEmpty) {
-          log(loginModel.access.toString());
           // shared prefs object to store access and refresh
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
           //storing access token
           await prefs.setString("access", loginModel.access.toString());
-          log(prefs.getString("access").toString());
 
           //storing refresh token
           await prefs.setString("refresh", loginModel.refresh.toString());
         }
+        isLoading = false;
+        notifyListeners();
+        // returning true after login
+        return true;
+      } else {
+        var decodedData = jsonDecode(response.body);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(decodedData["detail"])));
       }
     } catch (e) {
       print(e);
@@ -52,5 +57,7 @@ class LoginScreenController with ChangeNotifier {
 
     isLoading = false;
     notifyListeners();
+    // returning false on all other cases
+    return false;
   }
 }

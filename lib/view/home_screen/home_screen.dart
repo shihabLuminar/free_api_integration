@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:token_test/controller/home_screen_controller.dart';
+import 'package:token_test/view/login_screen/login_screen.dart';
 import 'package:token_test/view/product_add_screen/product_adding_screen.dart';
 import 'package:token_test/view/product_edit_screen/product_edit_screen.dart';
 
@@ -8,6 +11,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        await context.read<HomeScreenController>().getProducts();
+      },
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
