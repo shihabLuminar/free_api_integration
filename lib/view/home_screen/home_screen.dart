@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:token_test/controller/home_screen_controller.dart';
+import 'package:token_test/utils/app_utils.dart';
 import 'package:token_test/view/login_screen/login_screen.dart';
 import 'package:token_test/view/product_add_screen/product_adding_screen.dart';
 import 'package:token_test/view/product_edit_screen/product_edit_screen.dart';
@@ -24,7 +29,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Home")),
+      appBar: AppBar(actions: [
+        IconButton(
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.clear();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+                (route) => false,
+              );
+            },
+            icon: Icon(Icons.logout))
+      ], title: Text("Home")),
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) {

@@ -1,4 +1,4 @@
-package com.example.token_test
+package com.luminar.sample_app
 
 import io.flutter.embedding.android.FlutterActivity
 
